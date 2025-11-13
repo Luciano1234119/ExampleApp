@@ -12,6 +12,10 @@
         "source": "com.example.exampleapp-main-77:/xml/data_extraction_rules.xml"
     },
     {
+        "merged": "com.example.exampleapp-debug-75:/drawable_gasalert_logo.png.flat",
+        "source": "com.example.exampleapp-main-77:/drawable/gasalert_logo.png"
+    },
+    {
         "merged": "com.example.exampleapp-debug-75:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
         "source": "com.example.exampleapp-main-77:/mipmap-xxhdpi/ic_launcher_round.webp"
     },

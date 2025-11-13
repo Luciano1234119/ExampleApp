@@ -43,12 +43,12 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            // Logo superior
+            // 🖼️ Logo superior personalizado
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = R.drawable.gasalert_logo),
                 contentDescription = "Logo GasAlert",
                 modifier = Modifier
-                    .size(120.dp)
+                    .size(150.dp)
                     .padding(bottom = 16.dp)
             )
 
@@ -66,7 +66,7 @@ fun LoginScreen(
                 modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
             )
 
-            // Campo de correo
+            // ✉️ Campo de correo
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -78,7 +78,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Campo de contraseña
+            // 🔒 Campo de contraseña
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -91,23 +91,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // ¿Olvidaste tu contraseña?
-            ClickableText(
-                text = AnnotatedString("¿Olvidaste tu contraseña?"),
-                onClick = { onForgotPasswordClick() },
-                style = LocalTextStyle.current.copy(
-                    color = Color(0xFF4A5CF5),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.End
-                ),
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(top = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Botón de inicio de sesión
+            // 🔵 Botón de inicio de sesión
             Button(
                 onClick = onLoginClick,
                 modifier = Modifier
@@ -122,7 +106,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Texto de registro
+            // 🔗 Texto de registro
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically

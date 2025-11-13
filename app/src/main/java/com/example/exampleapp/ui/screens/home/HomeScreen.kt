@@ -1,35 +1,80 @@
 package com.example.exampleapp.ui.screens.home
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.exampleapp.ui.screens.home.UsersVM
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Color
+import com.example.exampleapp.R
 
 @Composable
-fun HomeScreen(onGo: (String) -> Unit = {}) {
+fun HomeScreen(
+    onGoToGraph: () -> Unit = {},
+    onGoToAlarm: () -> Unit = {}
+) {
     Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text("Pantalla Home")
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = { onGo("123") }) {
-            Text("Ir a detalle")
+        // Logo principal
+        Image(
+            painter = painterResource(id = R.drawable.gasalert_logo),
+            contentDescription = "Logo GasAlert",
+            modifier = Modifier
+                .size(140.dp)
+                .padding(bottom = 16.dp)
+        )
+
+        Text(
+            text = "Bienvenido a GasAlert",
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+            textAlign = TextAlign.Center,
+            color = Color(0xFF1A1A1A)
+        )
+
+        Text(
+            text = "Detectamos el peligro antes de que lo respires.",
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
+            textAlign = TextAlign.Center,
+            color = Color.Gray,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Botón para ir al gráfico
+        Button(
+            onClick = onGoToGraph,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            Text("Ver Gráfico de Gases", color = Color.White, fontSize = 16.sp)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para ir a la alarma
+        OutlinedButton(
+            onClick = onGoToAlarm,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            Text("Probar Alarma de Gas", fontSize = 16.sp)
         }
     }
 }
