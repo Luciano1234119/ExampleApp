@@ -1,45 +1,63 @@
 package com.example.exampleapp.ui.screens.login
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
-// Estado para el proceso de inicio de sesión (muy similar al de registro)
-sealed class LoginState {
-    object Idle : LoginState()
-    object Loading : LoginState()
-    object Success : LoginState()
-    data class Error(val message: String) : LoginState()
+data class LoginUiState(
+    val email: String = "",
+    val password: String = "",
+    val errorMessage: String? = null,
+    val isLoading: Boolean = false
+) {
+    fun isFormValid(): Boolean =
+        email.isNotBlank() &&
+                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+                password.isNotBlank()
 }
 
 class LoginViewModel : ViewModel() {
 
-    private val auth: FirebaseAuth = Firebase.auth
+    var uiState by mutableStateOf(LoginUiState())
+        private set
 
-    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
-    val loginState = _loginState.asStateFlow()
+    // Instancia de Firebase Auth
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun loginUser(email: String, password: String) {
-        viewModelScope.launch {
-            _loginState.value = LoginState.Loading
-            try {
-                // 1. Llamar a la función de Firebase para iniciar sesión
-                auth.signInWithEmailAndPassword(email, password).await()
+    fun updateEmail(email: String) {
+        uiState = uiState.copy(email = email, errorMessage = null)
+    }
 
-                // 2. Si la llamada es exitosa (no lanza excepción), el inicio de sesión fue correcto
-                _loginState.value = LoginState.Success
+    fun updatePassword(password: String) {
+        uiState = uiState.copy(password = password, errorMessage = null)
+    }
 
-            } catch (e: Exception) {
-                // 3. Si algo falla, capturamos la excepción y emitimos un estado de error
-                val errorMessage = e.message ?: "Ocurrió un error desconocido."
-                _loginState.value = LoginState.Error(errorMessage)
-            }
+    /**
+     * Inicia sesión con Firebase Authentication.
+     */
+    fun loginUser(onSuccess: () -> Unit) {
+        if (!uiState.isFormValid()) {
+            uiState = uiState.copy(errorMessage = "Correo o contraseña no válidos.")
+            return
         }
+
+        uiState = uiState.copy(isLoading = true, errorMessage = null)
+
+        // Llamada real a Firebase Auth
+        auth.signInWithEmailAndPassword(uiState.email, uiState.password)
+            .addOnSuccessListener {
+                // Éxito
+                uiState = uiState.copy(isLoading = false)
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                // Error
+                uiState = uiState.copy(
+                    isLoading = false,
+                    errorMessage = "Error al iniciar sesión. Verifica tus credenciales."
+                )
+            }
     }
 }

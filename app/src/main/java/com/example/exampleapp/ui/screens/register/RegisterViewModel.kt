@@ -4,8 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
 
 data class RegisterUiState(
     val name: String = "",
@@ -18,6 +17,7 @@ data class RegisterUiState(
     fun isFormValid(): Boolean =
         name.isNotBlank() &&
                 email.isNotBlank() &&
+                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && // Validación de email
                 password.length >= 6 &&
                 password == confirmPassword
 }
@@ -25,55 +25,63 @@ data class RegisterUiState(
 
 class RegisterViewModel : ViewModel() {
 
-    var uiState by androidx.compose.runtime.mutableStateOf(RegisterUiState())
+    var uiState by mutableStateOf(RegisterUiState())
         private set
 
+    // Instancia de Firebase Auth
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
     fun updateName(name: String) {
-        uiState = uiState.copy(name = name)
+        uiState = uiState.copy(name = name, errorMessage = null)
     }
 
     fun updateEmail(email: String) {
-        uiState = uiState.copy(email = email)
+        uiState = uiState.copy(email = email, errorMessage = null)
     }
 
     fun updatePassword(password: String) {
-        uiState = uiState.copy(password = password)
+        uiState = uiState.copy(password = password, errorMessage = null)
     }
 
     fun updateConfirmPassword(confirm: String) {
-        uiState = uiState.copy(confirmPassword = confirm)
+        uiState = uiState.copy(confirmPassword = confirm, errorMessage = null)
     }
 
     /**
-     * Simula un registro de usuario.
-     * Si usas Firebase, reemplaza el bloque con la llamada a FirebaseAuth.
+     * Registra un nuevo usuario con Firebase Authentication.
      */
     fun registerUser(onSuccess: () -> Unit) {
         if (!uiState.isFormValid()) {
-            uiState = uiState.copy(errorMessage = "Por favor completa todos los campos correctamente")
+            uiState = uiState.copy(errorMessage = "Por favor completa todos los campos correctamente.")
             return
         }
 
         uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-        viewModelScope.launch {
-            try {
-                // 🔹 Ejemplo: Aquí puedes integrar Firebase
-                // FirebaseAuth.getInstance().createUserWithEmailAndPassword(uiState.email, uiState.password)
-                //     .addOnSuccessListener { onSuccess() }
-                //     .addOnFailureListener { e -> uiState = uiState.copy(errorMessage = e.message) }
-
-                // Simulación de éxito (puedes quitar esto al integrar Firebase)
-                kotlinx.coroutines.delay(1500)
+        // Llamada real a Firebase Auth
+        auth.createUserWithEmailAndPassword(uiState.email, uiState.password)
+            .addOnSuccessListener {
+                // Éxito
                 uiState = uiState.copy(isLoading = false)
+                // Aquí también podrías guardar el 'name' en Firestore o en el Perfil de Firebase
                 onSuccess()
-
-            } catch (e: Exception) {
+            }
+            .addOnFailureListener { e ->
+                // Error
                 uiState = uiState.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Error desconocido"
+                    errorMessage = mapFirebaseError(e.message)
                 )
             }
+    }
+
+    // Mapeo simple de errores de Firebase a español
+    private fun mapFirebaseError(errorCode: String?): String {
+        return when (errorCode) {
+            "ERROR_EMAIL_ALREADY_IN_USE" -> "El correo electrónico ya está en uso."
+            "ERROR_INVALID_EMAIL" -> "El correo electrónico no es válido."
+            "ERROR_WEAK_PASSWORD" -> "La contraseña es demasiado débil (mínimo 6 caracteres)."
+            else -> "Error en el registro. Inténtalo de nuevo."
         }
     }
 }

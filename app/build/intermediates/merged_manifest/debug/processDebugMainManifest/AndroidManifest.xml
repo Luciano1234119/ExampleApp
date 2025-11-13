@@ -8,6 +8,7 @@
         android:minSdkVersion="26"
         android:targetSdkVersion="34" />
 
+    <!-- 1. Permiso de Internet REQUERIDO para Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -32,10 +33,14 @@
         android:testOnly="true"
         android:theme="@style/Theme.ExampleApp" >
 
-        <!-- Activity principal -->
+        <!--
+         Activity principal (Single-Activity para Compose).
+         Todas las demás <activity> han sido eliminadas porque no son necesarias.
+        -->
         <activity
             android:name="com.example.exampleapp.MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/Theme.ExampleApp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,32 +48,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Activity de Login -->
-        <activity
-            android:name="com.example.exampleapp.ui.login.LoginActivity"
-            android:exported="false" />
-
-        <!-- Activity de Registro -->
-        <activity
-            android:name="com.example.exampleapp.ui.register.RegisterActivity"
-            android:exported="false" />
-
-        <!-- Activity de Bienvenida -->
-        <activity
-            android:name="com.example.exampleapp.ui.welcome.WelcomeActivity"
-            android:exported="false" />
-
-        <!-- Activity del Gráfico -->
-        <activity
-            android:name="com.example.exampleapp.ui.graph.GasGraphActivity"
-            android:exported="false" />
-
-        <!-- Activity de Prueba de Alarma -->
-        <activity
-            android:name="com.example.exampleapp.ui.alarm.AlarmTestActivity"
-            android:exported="false" />
-
-        <!-- Configuración de Firebase -->
+        <!-- Configuración de Firebase (Opcional, pero bueno tenerlo) -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />

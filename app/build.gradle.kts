@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    // 1. Aplicar el plugin de Google Services
     id("com.google.gms.google-services")
 }
 
@@ -9,14 +10,12 @@ android {
     namespace = "com.example.exampleapp"
     compileSdk = 34
 
-
     defaultConfig {
         applicationId = "com.example.exampleapp"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,89 +28,55 @@ android {
             )
         }
     }
+
+    // 2. Unificar las compileOptions
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-        kotlinOptions {
-            jvmTarget = "11"
-        }
+        sourceCompatibility = JavaVersion.VERSION_1_8 // Firebase es compatible con 1.8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-
+    kotlinOptions {
+        jvmTarget = "1.8" // Firebase es compatible con 1.8
+    }
 
     buildFeatures {
         compose = true
     }
-    composeCompiler {
-        enableStrongSkippingMode = true
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
+    composeOptions { // 3. Corregido el nombre de 'composeCompiler' a 'composeOptions'
+        kotlinCompilerExtensionVersion = "1.5.8" // Asegúrate que esta versión sea compatible con tu Kotlin
     }
 }
 
-
-
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    //implementation(libs.androidx.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui.tooling.preview)
-    debugImplementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.coil.compose)
-    implementation(libs.androidx.compose.material.icons.extended)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
+    // 4. Dependencias de Firebase (BOM - Bill of Materials)
+    // El BoM maneja las versiones de las librerías de Firebase por ti.
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-auth-ktx") // Autenticación
+    implementation("com.google.firebase:firebase-firestore-ktx") // Firestore (si lo usas)
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.activity:activity-compose:1.8.0")
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.material:material:1.5.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
-    implementation("androidx.navigation:navigation-compose:2.7.0")
-
-    val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
+    // Compose
+    val composeBom = platform("androidx.compose:compose-bom:2024.06.00") // BOM de Compose
     implementation(composeBom)
-
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
-
     implementation("androidx.activity:activity-compose:1.9.0")
-
-    implementation("androidx.navigation:navigation-compose:2.8.0")
-
-    // Firebase Auth
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("com.google.firebase:firebase-firestore:25.0.0")
-
-    // Para iconos
+    implementation("androidx.navigation:navigation-compose:2.7.7") // Versión estable
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
     implementation("androidx.compose.material:material-icons-extended")
 
-    // Para ViewModel + Compose
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
-}
+    // Coil (Imágenes)
+    implementation(libs.coil.compose)
 
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    // 5. Eliminadas las dependencias duplicadas de Firebase y Compose
+}

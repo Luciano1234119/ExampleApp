@@ -1,17 +1,18 @@
 package com.example.exampleapp.ui.screens.graph
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bolt
-
-import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.example.exampleapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,8 +48,15 @@ fun GraphScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Aquí podrías agregar un gráfico real con librerías como Recharts o MPAndroidChart
-            Text("📊 Aquí irá el gráfico de gases (placeholder).")
+            // Imagen del gráfico
+            Image(
+                painter = painterResource(id = R.drawable.grafico),
+                contentDescription = "Gráfico de niveles de gases",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .padding(8.dp)
+            )
         }
     }
 }
