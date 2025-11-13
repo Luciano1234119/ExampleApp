@@ -17,7 +17,7 @@ data class RegisterUiState(
     fun isFormValid(): Boolean =
         name.isNotBlank() &&
                 email.isNotBlank() &&
-                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && // Validación de email
+                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
                 password.length >= 6 &&
                 password == confirmPassword
 }
@@ -28,7 +28,6 @@ class RegisterViewModel : ViewModel() {
     var uiState by mutableStateOf(RegisterUiState())
         private set
 
-    // Instancia de Firebase Auth
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun updateName(name: String) {
@@ -47,9 +46,6 @@ class RegisterViewModel : ViewModel() {
         uiState = uiState.copy(confirmPassword = confirm, errorMessage = null)
     }
 
-    /**
-     * Registra un nuevo usuario con Firebase Authentication.
-     */
     fun registerUser(onSuccess: () -> Unit) {
         if (!uiState.isFormValid()) {
             uiState = uiState.copy(errorMessage = "Por favor completa todos los campos correctamente.")
@@ -58,16 +54,12 @@ class RegisterViewModel : ViewModel() {
 
         uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-        // Llamada real a Firebase Auth
         auth.createUserWithEmailAndPassword(uiState.email, uiState.password)
             .addOnSuccessListener {
-                // Éxito
                 uiState = uiState.copy(isLoading = false)
-                // Aquí también podrías guardar el 'name' en Firestore o en el Perfil de Firebase
                 onSuccess()
             }
             .addOnFailureListener { e ->
-                // Error
                 uiState = uiState.copy(
                     isLoading = false,
                     errorMessage = mapFirebaseError(e.message)
@@ -75,7 +67,6 @@ class RegisterViewModel : ViewModel() {
             }
     }
 
-    // Mapeo simple de errores de Firebase a español
     private fun mapFirebaseError(errorCode: String?): String {
         return when (errorCode) {
             "ERROR_EMAIL_ALREADY_IN_USE" -> "El correo electrónico ya está en uso."

@@ -48,7 +48,6 @@ fun GraphScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Imagen del gráfico
             Image(
                 painter = painterResource(id = R.drawable.grafico),
                 contentDescription = "Gráfico de niveles de gases",

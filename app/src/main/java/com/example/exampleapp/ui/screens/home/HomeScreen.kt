@@ -29,7 +29,6 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Logo principal
         Image(
             painter = painterResource(id = R.drawable.gasalert_logo),
             contentDescription = "Logo GasAlert",
@@ -55,7 +54,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Botón para ir al gráfico
         Button(
             onClick = onGoToGraph,
             modifier = Modifier
@@ -67,7 +65,6 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón para ir a la alarma
         OutlinedButton(
             onClick = onGoToAlarm,
             modifier = Modifier

@@ -54,7 +54,6 @@ fun AlarmScreen(onBack: () -> Unit) {
 
             Button(
                 onClick = {
-                    // Aquí podrías reproducir un sonido o vibración si lo deseas
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

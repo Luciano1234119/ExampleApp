@@ -24,13 +24,12 @@ import com.example.exampleapp.ui.components.PasswordTextField // Importamos el P
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit = {}, // Cambiado de onLoginClick a onLoginSuccess
+    onLoginSuccess: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
-    loginViewModel: LoginViewModel = viewModel() // Inyectamos el ViewModel
-    // Se eliminó el parámetro duplicado: onLoginClick: () -> Unit
+    loginViewModel: LoginViewModel = viewModel()
 ) {
-    val uiState = loginViewModel.uiState // Obtenemos el estado desde el ViewModel
+    val uiState = loginViewModel.uiState
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -44,7 +43,6 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            // 🖼️ Logo superior personalizado
             Image(
                 painter = painterResource(id = R.drawable.gasalert_logo),
                 contentDescription = "Logo GasAlert",
@@ -67,10 +65,9 @@ fun LoginScreen(
                 modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
             )
 
-            // ✉️ Campo de correo
             OutlinedTextField(
-                value = uiState.email, // Conectado al ViewModel
-                onValueChange = { loginViewModel.updateEmail(it) }, // Conectado al ViewModel
+                value = uiState.email,
+                onValueChange = { loginViewModel.updateEmail(it) },
                 label = { Text("Correo electrónico") },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
                 singleLine = true,
@@ -79,19 +76,17 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 🔒 Campo de contraseña (Usando el Composable reutilizable)
             PasswordTextField(
-                value = uiState.password, // Conectado al ViewModel
-                onValueChange = { loginViewModel.updatePassword(it) }, // Conectado al ViewModel
+                value = uiState.password,
+                onValueChange = { loginViewModel.updatePassword(it) },
                 label = "Contraseña"
             )
 
-            Spacer(modifier = Modifier.height(24.dp)) // Aumentado el espacio
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // 🔵 Botón de inicio de sesión
             Button(
                 onClick = {
-                    loginViewModel.loginUser(onLoginSuccess) // Llamada al ViewModel
+                    loginViewModel.loginUser(onLoginSuccess)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -99,7 +94,7 @@ fun LoginScreen(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF4A5CF5)
                 ),
-                enabled = !uiState.isLoading // Deshabilitado mientras carga
+                enabled = !uiState.isLoading
             ) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(
@@ -111,7 +106,6 @@ fun LoginScreen(
                 }
             }
 
-            // Mensaje de error
             if (uiState.errorMessage != null) {
                 Text(
                     text = uiState.errorMessage!!,
@@ -123,7 +117,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 🔗 Texto de registro
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically

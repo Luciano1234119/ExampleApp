@@ -11,10 +11,10 @@ import com.google.firebase.FirebaseApp // Import para inicializar Firebase
 sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Register : Screen("register")
-    object Home : Screen("home") // Cambiado 'Welcome' por 'Home' para consistencia
+    object Home : Screen("home")
     object Graph : Screen("graph")
     object Alarm : Screen("alarm")
-    object Detail : Screen("detail/{id}") { // Ruta para detalles con argumento
+    object Detail : Screen("detail/{id}") {
         fun createRoute(id: String) = "detail/$id"
     }
 }
@@ -23,11 +23,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inicializar Firebase
+
         FirebaseApp.initializeApp(this)
 
         setContent {
-            // Usamos el tema personalizado de la app
             GasAlertTheme {
                 val navController = rememberNavController()
                 AppNav(navController)

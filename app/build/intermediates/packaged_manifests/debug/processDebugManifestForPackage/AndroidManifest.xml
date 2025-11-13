@@ -8,7 +8,6 @@
         android:minSdkVersion="26"
         android:targetSdkVersion="34" />
 
-    <!-- 1. Permiso de Internet REQUERIDO para Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -32,11 +31,6 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.ExampleApp" >
-
-        <!--
-         Activity principal (Single-Activity para Compose).
-         Todas las demás <activity> han sido eliminadas porque no son necesarias.
-        -->
         <activity
             android:name="com.example.exampleapp.MainActivity"
             android:exported="true"
@@ -48,7 +42,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Configuración de Firebase (Opcional, pero bueno tenerlo) -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
